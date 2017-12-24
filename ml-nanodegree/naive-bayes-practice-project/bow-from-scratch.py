@@ -23,4 +23,5 @@ frequency_list = []
 for bag in preprocessed_documents:
     frequency_list.append(collections.Counter(bag))
 
-print(frequency_list)
+import pprint
+pprint.pprint(frequency_list)
