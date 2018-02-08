@@ -3,6 +3,7 @@ import math
 from environment import Agent, Environment
 from planner import RoutePlanner
 from simulator import Simulator
+import numpy as np
 
 class LearningAgent(Agent):
     """ An agent that learns to drive in the Smartcab world.
@@ -91,7 +92,7 @@ class LearningAgent(Agent):
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
 
-        if state not in self.Q:
+        if state not in self.Q.values():
             self.Q[state] = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
 
         return
@@ -115,9 +116,16 @@ class LearningAgent(Agent):
         # Be sure that when choosing an action with highest Q-value that you randomly select between actions that "tie".
 
         if self.learning == False:
-            action = random.choice(self.valid_actions)
-        elif self.learning == True:
-            #choose a random action with 'epsilon' probability
+            rand_num = random.random()
+            if rand_num < epsilon:
+                action = random.choice(self.valid_actions)
+            else:
+                best = 0.0
+                action = None
+                for key, value in self.Q:
+                    if value > best:
+                        best = value
+                        action = key
         else:
             #choose highest Q value
             best = 0.0
@@ -141,6 +149,9 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
+        values = {}
+        for state in self.Q.values():
+            values[state] = 0
 
         return
 
@@ -177,7 +188,7 @@ def run():
     #   learning   - set to True to force the driving agent to use Q-learning
     #    * epsilon - continuous value for the exploration factor, default is 1
     #    * alpha   - continuous value for the learning rate, default is 0.5
-    agent = env.create_agent(LearningAgent)
+    agent = env.create_agent(LearningAgent, learning=True)
     
     ##############
     # Follow the driving agent
