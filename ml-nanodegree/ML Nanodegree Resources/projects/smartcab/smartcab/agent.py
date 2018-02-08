@@ -68,7 +68,7 @@ class LearningAgent(Agent):
         # With the hand-engineered features, this learning process gets entirely negated.
         
         # Set 'state' as a tuple of relevant data for the agent        
-        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'], inputs['right'], deadline)
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'], inputs['right'])
 
         return state
 
@@ -126,22 +126,21 @@ class LearningAgent(Agent):
             if rand_num < epsilon:
                 action = random.choice(self.valid_actions)
             else:
-                best = 0.0
-                best_actions = []
-                for key, value in self.Q[state].iteritems():
-                    if value > best:
-                        best = value
-                        best_actions = [].append(key)
-                    elif value == best:
-                        best_actions.append(key)
-                
-                if best_actions.count >=2:
-                    action = random.choice(best_actions)
-                else:
-                    action = best_actions[0]
+                q_table = self.Q[state]
+                best_score = max(q_table.values())
+                best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
         else:
             #choose highest Q value
-            
+            # q_table = self.Q[state]
+            # best_score = max(q_table.values())
+            # best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
+            rand_num = random.random()
+            if rand_num < self.epsilon:
+                action = random.choice(self.valid_actions)
+            else:
+                q_table = self.Q[state]
+                best_score = max(q_table.values())
+                best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
 
         return action
 
