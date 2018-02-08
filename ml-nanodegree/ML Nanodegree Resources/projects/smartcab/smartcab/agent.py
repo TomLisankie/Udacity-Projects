@@ -127,19 +127,20 @@ class LearningAgent(Agent):
                 action = random.choice(self.valid_actions)
             else:
                 best = 0.0
-                action = None
+                best_actions = []
                 for key, value in self.Q[state].iteritems():
                     if value > best:
                         best = value
-                        action = key
+                        best_actions = [].append(key)
+                    elif value == best:
+                        best_actions.append(key)
+                
+                if best_actions.count >=2:
+                    action = random.choice(best_actions)
+                else:
+                    action = best_actions[0]
         else:
             #choose highest Q value
-            best = 0.0
-            action = None
-            for key, value in self.Q[state].iteritems():
-                if value > best:
-                    best = value
-                    action = key
             
 
         return action
@@ -154,13 +155,11 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # When learning, implement the value iteration update rule
-        #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        values = {}
-        for state in self.Q.keys():
-            values[state] = 0
+        # Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
+        if self.learning:
+             self.Q[state][action] = reward
 
         return
-
 
     def update(self):
         """ The update function is called when a time step is completed in the 
