@@ -41,6 +41,11 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
 
+        self.epsilon = self.epsilon - 0.05
+        if testing:
+            self.epsilon = 0.0
+            self.alpha = 0.0
+
         return None
 
     def build_state(self):
@@ -63,7 +68,7 @@ class LearningAgent(Agent):
         # With the hand-engineered features, this learning process gets entirely negated.
         
         # Set 'state' as a tuple of relevant data for the agent        
-        state = (waypoint, inputs, deadline)
+        state = (waypoint, inputs['light'], inputs['oncoming'], inputs['left'], inputs['right'], deadline)
 
         return state
 
@@ -90,10 +95,11 @@ class LearningAgent(Agent):
         ###########
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
-        #   Then, for each action available, set the initial Q-value to 0.0
+        # Then, for each action available, set the initial Q-value to 0.0
 
-        if state not in self.Q.values():
-            self.Q[state] = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
+        if state not in self.Q.keys():
+            actionDict = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
+            self.Q[state] = actionDict
 
         return
 
@@ -122,7 +128,7 @@ class LearningAgent(Agent):
             else:
                 best = 0.0
                 action = None
-                for key, value in self.Q:
+                for key, value in self.Q[state].iteritems():
                     if value > best:
                         best = value
                         action = key
@@ -130,7 +136,7 @@ class LearningAgent(Agent):
             #choose highest Q value
             best = 0.0
             action = None
-            for key, value in self.Q:
+            for key, value in self.Q[state].iteritems():
                 if value > best:
                     best = value
                     action = key
@@ -150,7 +156,7 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         values = {}
-        for state in self.Q.values():
+        for state in self.Q.keys():
             values[state] = 0
 
         return
