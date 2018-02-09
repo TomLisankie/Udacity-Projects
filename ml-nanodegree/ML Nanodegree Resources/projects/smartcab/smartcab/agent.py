@@ -129,6 +129,7 @@ class LearningAgent(Agent):
                 q_table = self.Q[state]
                 best_score = max(q_table.values())
                 best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
+                action = random.choice(best_actions)
         else:
             #choose highest Q value
             # q_table = self.Q[state]
@@ -140,7 +141,8 @@ class LearningAgent(Agent):
             else:
                 q_table = self.Q[state]
                 best_score = max(q_table.values())
-                best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
+                best_actions = [act for act in q_table.keys() if q_table[act] == best_score] #all the actions that have the max q-value
+                action = random.choice(best_actions)
 
         return action
 
