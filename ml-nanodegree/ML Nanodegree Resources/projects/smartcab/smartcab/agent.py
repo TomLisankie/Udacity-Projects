@@ -24,6 +24,7 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Set any additional class parameters as needed
+        self.trial_num = 1.0 #used to keep track of number of training trials gone through
 
 
     def reset(self, destination=None, testing=False):
@@ -41,10 +42,11 @@ class LearningAgent(Agent):
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
 
-        self.epsilon = self.epsilon - 0.05
+        self.epsilon = 0.9**self.trial_num
         if testing:
             self.epsilon = 0.0
             self.alpha = 0.0
+        self.trial_num = self.trial_num + 1.0
 
         return None
 
@@ -132,9 +134,6 @@ class LearningAgent(Agent):
                 action = random.choice(best_actions)
         else:
             #choose highest Q value
-            # q_table = self.Q[state]
-            # best_score = max(q_table.values())
-            # best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
             rand_num = random.random()
             if rand_num < self.epsilon:
                 action = random.choice(self.valid_actions)
@@ -158,7 +157,7 @@ class LearningAgent(Agent):
         # When learning, implement the value iteration update rule
         # Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
         if self.learning:
-             self.Q[state][action] = reward
+             self.Q[state][action] = ((1-self.alpha)*self.Q[state][action]) + (self.alpha*reward)
 
         return
 
@@ -209,7 +208,7 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.01, log_metrics=True)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, optimized=True)
     
     ##############
     # Run the simulator
