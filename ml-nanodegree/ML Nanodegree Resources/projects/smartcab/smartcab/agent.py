@@ -98,10 +98,10 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         # Then, for each action available, set the initial Q-value to 0.0
-
-        if state not in self.Q.keys():
-            actionDict = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
-            self.Q[state] = actionDict
+        if learning:
+            if state not in self.Q.keys():
+                actionDict = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
+                self.Q[state] = actionDict
 
         return
 
@@ -124,14 +124,7 @@ class LearningAgent(Agent):
         # Be sure that when choosing an action with highest Q-value that you randomly select between actions that "tie".
 
         if self.learning == False:
-            rand_num = random.random()
-            if rand_num < epsilon:
-                action = random.choice(self.valid_actions)
-            else:
-                q_table = self.Q[state]
-                best_score = max(q_table.values())
-                best_actions = [act for act in q_table.keys() if q_table[act] == best_score]
-                action = random.choice(best_actions)
+            action = random.choice(self.valid_actions)
         else:
             #choose highest Q value
             rand_num = random.random()
