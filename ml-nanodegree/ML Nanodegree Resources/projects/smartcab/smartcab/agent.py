@@ -41,8 +41,7 @@ class LearningAgent(Agent):
         # Update epsilon using a decay function of your choice
         # Update additional class parameters as needed
         # If 'testing' is True, set epsilon and alpha to 0
-
-        self.epsilon = (1/(self.trial_num**0.5)) + (((0.5) * math.cos(self.trial_num))+0.48) # (1/(self.trial_num**0.5)) + (((0.5) * math.cos(self.trial_num))+0.5)
+        self.epsilon = 1/(self.trial_num**0.5) #math.e**(-(x*self.trial_num))    # (1/(self.trial_num**0.5)) + (((0.5) * math.cos(self.trial_num))+0.48)
         if testing:
             self.epsilon = 0.0
             self.alpha = 0.0
@@ -98,7 +97,7 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         # Then, for each action available, set the initial Q-value to 0.0
-        if learning:
+        if self.learning:
             if state not in self.Q.keys():
                 actionDict = {None : 0.0, 'forward' : 0.0, 'left' : 0.0, 'right' : 0.0}
                 self.Q[state] = actionDict
