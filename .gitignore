@@ -1,3 +1,4 @@
 ml-nanodegree/ML\ Nanodegree\ Resources/projects/dog-project/dogImages/*
 ml-nanodegree/ML\ Nanodegree\ Resources/projects/dog-project/lfw/*
 *.hdf5
+*.npz
