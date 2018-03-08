@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+from Prhymer import RhymeFinder, Word, OrderedPair, Phoneme, CartesianProduct
 
 np.random.seed(172632)
 
@@ -17,12 +18,17 @@ for phonemic_trans1 in reg_list:
     reg_list.pop(0)
 
 # TODO: find rhyme percentile for each pair of words
+path_to_dict = "./Prhymer/cmudict-0.7b_modified.txt"
+path_to_feature_set = "./Prhymer/features.txt"
+rhyme_finder = RhymeFinder.RhymeFinder(path_to_dict, path_to_feature_set)
+for pair in pairs_list:
+    pair.append(rhyme_finder.findRhymePercentileForWords(Word.Word("", pair[0]), Word.Word("", pair[1])))
 
 # shuffle
 import random
 random.seed(172632)
 random.shuffle(pairs_list)
-pairs_list.insert(0, ["phonemic_transcriptions_1", "phonemic_transcriptions_2"])
+pairs_list.insert(0, ["phonemic_transcriptions_1", "phonemic_transcriptions_2", "rhyme_percentile"])
 
 # split into training and testing sets
 train = pairs_list[ : int(0.8*len(pairs_list))]
