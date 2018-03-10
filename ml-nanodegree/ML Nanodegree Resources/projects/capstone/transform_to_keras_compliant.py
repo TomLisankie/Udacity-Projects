@@ -23,5 +23,16 @@ def floor_rhyme_percentile(rp):
     floored = math.floor(float(rp)*10)/10
     return floored
 
-print(translate_phonemes_to_ints("HH AE N D IY"))
+transformed_train = pd.DataFrame(columns = 
+                    ["phonemic_transcriptions_1", "phonemic_transcriptions_2", "rhyme_percentile"])
+transformed_test = pd.DataFrame(columns = 
+                    ["phonemic_transcriptions_1", "phonemic_transcriptions_2", "rhyme_percentile"])
+
+for old_row in train.iloc[:, 0:0].values:
+    new_row = pd.Series([translate_phonemes_to_ints(old_row[0]), translate_phonemes_to_ints(old_row[1]), 
+                floor_rhyme_percentile(old_row[2])])
+    transformed_train.append(new_row)
+
+print(transformed_train)
+    
 
