@@ -1,6 +1,7 @@
 import pandas as pd 
 import numpy as np
 import csv
+import math
 
 np.random.seed(172632)
 
@@ -29,11 +30,13 @@ transformed_train = pd.DataFrame(columns =
 transformed_test = pd.DataFrame(columns = 
                     ["phonemic_transcriptions_1", "phonemic_transcriptions_2", "rhyme_percentile"])
 
-for old_row in train.iloc[:, 0:0].values:
-    new_row = pd.Series([translate_phonemes_to_ints(old_row[0]), translate_phonemes_to_ints(old_row[1]), 
-                floor_rhyme_percentile(old_row[2])])
-    transformed_train.append(new_row)
+transformed_train["phonemic_transcriptions_1"] = pd.Series([translate_phonemes_to_ints(sequence) for sequence in train["phonemic_transcriptions_1"]])
+transformed_train["phonemic_transcriptions_2"] = pd.Series([translate_phonemes_to_ints(sequence) for sequence in train["phonemic_transcriptions_2"]])
+transformed_train["rhyme_percentile"] = pd.Series([floor_rhyme_percentile(rp) for rp in train["rhyme_percentile"]])
 
-print(transformed_train)
-    
+transformed_test["phonemic_transcriptions_1"] = pd.Series([translate_phonemes_to_ints(sequence) for sequence in test["phonemic_transcriptions_1"]])
+transformed_test["phonemic_transcriptions_2"] = pd.Series([translate_phonemes_to_ints(sequence) for sequence in test["phonemic_transcriptions_2"]])
+transformed_test["rhyme_percentile"] = pd.Series([floor_rhyme_percentile(rp) for rp in test["rhyme_percentile"]])
 
+transformed_train.to_csv("capstone_train_and_test/final_train.csv", index = False)
+transformed_test.to_csv("capstone_train_and_test/final_test.csv", index = False)
