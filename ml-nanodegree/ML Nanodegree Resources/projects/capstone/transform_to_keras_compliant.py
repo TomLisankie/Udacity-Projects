@@ -24,7 +24,6 @@ def floor_rhyme_percentile(rp):
     floored = math.floor(float(rp)*10)/10
     return floored
 
-#TODO: Problematic
 transformed_train = pd.DataFrame(columns = 
                     ["phonemic_transcriptions_1", "phonemic_transcriptions_2", "rhyme_percentile"])
 transformed_test = pd.DataFrame(columns = 
