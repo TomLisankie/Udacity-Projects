@@ -5,8 +5,8 @@ import math
 
 np.random.seed(172632)
 
-train = pd.read_csv("capstone_train_and_test/train.csv")
-test = pd.read_csv("capstone_train_and_test/test.csv")
+train = pd.read_csv("capstone_train_and_test/old_train.csv")
+test = pd.read_csv("capstone_train_and_test/old_test.csv")
 
 phonemes_to_int_reference = {}
 with open('phonemes_to_int.csv', mode='r') as nemes:
